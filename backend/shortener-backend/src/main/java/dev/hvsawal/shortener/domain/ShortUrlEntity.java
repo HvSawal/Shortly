@@ -44,11 +44,16 @@ public class ShortUrlEntity {
     @NotNull
     private long clickCount;
 
-    public ShortUrlEntity(String originalUrl, boolean previewEnabled, OffsetDateTime createdAt, OffsetDateTime expiresAt) {
+    @Column(name = "url_hash", nullable = false, length = 64)
+    @NotNull
+    private String urlHash;
+
+    public ShortUrlEntity(String originalUrl, boolean previewEnabled, OffsetDateTime createdAt, OffsetDateTime expiresAt, String urlHash) {
         this.originalUrl = originalUrl;
         this.previewEnabled = previewEnabled;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.clickCount = 0L;
+        this.urlHash = urlHash;
     }
 }

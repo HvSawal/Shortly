@@ -23,6 +23,15 @@ public final class Base62 {
         return sb.reverse().toString();
     }
 
+    public static String encodeFixed(long value, int length) {
+        String s = encode(value);
+        if (s.length() > length) return s; // should not happen if value < 62^length
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = s.length(); i < length; i++) sb.append(ALPHABET[0]); // left pad with '0'-equivalent
+        sb.append(s);
+        return sb.toString();
+    }
+
     public static long decode(String str) {
         if (str == null || str.isBlank()) throw new IllegalArgumentException("str is blank");
 

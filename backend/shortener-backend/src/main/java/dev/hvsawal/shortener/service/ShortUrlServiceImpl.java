@@ -3,6 +3,7 @@ package dev.hvsawal.shortener.service;
 import dev.hvsawal.shortener.configuration.CacheConfiguration;
 import dev.hvsawal.shortener.configuration.ShortenerConfigurationProperties;
 import dev.hvsawal.shortener.core.CodeCodec;
+import dev.hvsawal.shortener.core.UrlHash;
 import dev.hvsawal.shortener.core.UrlNormalizer;
 import dev.hvsawal.shortener.domain.ShortUrlEntity;
 import dev.hvsawal.shortener.dto.ShortenUrlResponse;
@@ -15,6 +16,7 @@ import dev.hvsawal.shortener.support.resilience.DbBulkhead;
 import dev.hvsawal.shortener.support.resilience.SimpleRateLimiter;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.retry.annotation.Backoff;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Optional;
 
 @Service
 public class ShortUrlServiceImpl implements ShortUrlService {
@@ -61,13 +64,46 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             }
 
             String normalized = UrlNormalizer.normalize(url);
+
+            // Option A dedup key (same normalized url + previewEnabled => same urlHash)
+            String urlHash = UrlHash.sha256Hex(normalized, previewEnabled);
+
+            // 1) Fast path: already exists -> return same code
+            Optional<ShortUrlEntity> existing = repo.findByUrlHash(urlHash);
+            if (existing.isPresent()) {
+                ShortUrlEntity e = existing.get();
+                String code = codec.encodeId(e.getId());
+                // createdNew = false (or whatever your boolean means)
+                return toResponse(e, code, props.publicBaseUrl(), false);
+            }
+
+            // 2) Insert new
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             OffsetDateTime expires = now.plusYears(props.expirationYears());
 
-            ShortUrlEntity saved = repo.save(new ShortUrlEntity(normalized, previewEnabled, now, expires));
+            try {
+                ShortUrlEntity saved = repo.save(
+                        new ShortUrlEntity(
+                                normalized,
+                                previewEnabled,
+                                now,
+                                expires,
+                                urlHash
+                        )
+                );
 
-            String code = codec.encodeId(saved.getId());
-            return toResponse(saved, code, props.publicBaseUrl(), true);
+                String code = codec.encodeId(saved.getId());
+                return toResponse(saved, code, props.publicBaseUrl(), true);
+
+            } catch (DataIntegrityViolationException e) {
+                // Race: another request inserted same urlHash between our SELECT and INSERT.
+                // Return the existing row.
+                ShortUrlEntity winner = repo.findByUrlHash(urlHash)
+                        .orElseThrow(() -> e);
+
+                String code = codec.encodeId(winner.getId());
+                return toResponse(winner, code, props.publicBaseUrl(), false);
+            }
         }
     }
 

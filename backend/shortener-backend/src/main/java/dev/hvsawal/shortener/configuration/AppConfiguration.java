@@ -6,12 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(ShortenerConfigurationProperties.class)
+@EnableConfigurationProperties({ShortenerConfigurationProperties.class, CodeV2Props.class})
 public class AppConfiguration {
 
     @Bean
-    public CodeCodec codeCodec(ShortenerConfigurationProperties props) {
+    public CodeCodec codeCodec(ShortenerConfigurationProperties props, CodeV2Props v2Props) {
         var s = props.scramble();
-        return new CodeCodec(s.key(), s.rounds(), s.minLen());
+        return new CodeCodec(s.key(), s.rounds(), s.minLen(), v2Props);
     }
 }
