@@ -29,23 +29,26 @@ public final class UrlNormalizer {
             throw new InvalidUrlException("URL must be absolute and include a host");
         }
 
-        // Normalize host to ASCII (handles international domains)
-        String hostAscii = IDN.toASCII(uri.getHost());
+        UrlValidator.validateStrict(uri, true);
+        return uri.toString();
 
-        // Rebuild a clean URI (keeps path/query; drops user-info for safety)
-        try {
-            URI clean = new URI(
-                    scheme.toLowerCase(),
-                    null,
-                    hostAscii,
-                    uri.getPort(),
-                    uri.getRawPath(),
-                    uri.getRawQuery(),
-                    null
-            );
-            return clean.toASCIIString();
-        } catch (Exception e) {
-            throw new InvalidUrlException("Invalid URL");
-        }
+        // Normalize host to ASCII (handles international domains)
+//        String hostAscii = IDN.toASCII(uri.getHost());
+//
+//        // Rebuild a clean URI (keeps path/query; drops user-info for safety)
+//        try {
+//            URI clean = new URI(
+//                    scheme.toLowerCase(),
+//                    null,
+//                    hostAscii,
+//                    uri.getPort(),
+//                    uri.getRawPath(),
+//                    uri.getRawQuery(),
+//                    null
+//            );
+//            return clean.toASCIIString();
+//        } catch (Exception e) {
+//            throw new InvalidUrlException("Invalid URL");
+//        }
     }
 }
