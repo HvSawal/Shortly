@@ -31,4 +31,5 @@ public class ShortenController {
     public ShortenUrlResponse getMetadata(@PathVariable String code) {
         return service.getMetadata(code);
     }
+
 }

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Soft clay drop shadow -->
+    <filter id="clayShadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.22"/>
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+
+    <!-- Blue + Orange gradients -->
+    <linearGradient id="blueGrad" x1="220" y1="260" x2="680" y2="840" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7ED0FF"/>
+      <stop offset="0.45" stop-color="#2F7BFF"/>
+      <stop offset="1" stop-color="#165BFF"/>
+    </linearGradient>
+
+    <linearGradient id="orangeGrad" x1="840" y1="220" x2="360" y2="820" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFD08A"/>
+      <stop offset="0.45" stop-color="#FF9A2E"/>
+      <stop offset="1" stop-color="#FF6A2B"/>
+    </linearGradient>
+
+    <!-- Highlights (subtle glossy ridge) -->
+    <linearGradient id="blueHi" x1="260" y1="320" x2="560" y2="820" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="orangeHi" x1="800" y1="260" x2="420" y2="820" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.50"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Top link shape path (donut via evenodd) -->
+    <path id="topLinkShape" fill-rule="evenodd" clip-rule="evenodd"
+      d="M380 170
+         H644
+         C703.5 170 752 218.5 752 278
+         C752 337.5 703.5 386 644 386
+         H380
+         C320.5 386 272 337.5 272 278
+         C272 218.5 320.5 170 380 170
+         Z
+         M380 238
+         H644
+         C666.1 238 684 255.9 684 278
+         C684 300.1 666.1 318 644 318
+         H380
+         C357.9 318 340 300.1 340 278
+         C340 255.9 357.9 238 380 238
+         Z" />
+
+    <clipPath id="clipLeft">
+      <rect x="0" y="0" width="512" height="1024"/>
+    </clipPath>
+    <clipPath id="clipRight">
+      <rect x="512" y="0" width="512" height="1024"/>
+    </clipPath>
+  </defs>
+
+  <!-- ORANGE arrow (behind) -->
+  <g filter="url(#clayShadow)">
+    <!-- main stroke -->
+    <path d="M700 670
+             C812 670 872 586 872 484
+             C872 330 740 220 586 220
+             H508"
+          stroke="url(#orangeGrad)" stroke-width="176" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- highlight ridge -->
+    <path d="M700 670
+             C812 670 872 586 872 484
+             C872 330 740 220 586 220
+             H508"
+          stroke="url(#orangeHi)" stroke-width="112" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+
+    <!-- left-pointing arrow head -->
+    <path d="M508 220
+             L395 150
+             Q366 132 354 164
+             Q346 186 369 203
+             L438 252
+             L369 301
+             Q346 318 354 340
+             Q366 372 395 354
+             L508 284
+             Q532 269 532 252
+             Q532 235 508 220
+             Z"
+          fill="url(#orangeGrad)"/>
+    <path d="M498 226
+             L402 168
+             Q384 158 378 175
+             Q372 191 388 202
+             L452 247
+             L388 292
+             Q372 303 378 319
+             Q384 337 402 327
+             L498 269
+             Q512 261 512 247
+             Q512 234 498 226
+             Z"
+          fill="url(#orangeHi)" opacity="0.55"/>
+  </g>
+
+  <!-- BLUE arrow (front) -->
+  <g filter="url(#clayShadow)">
+    <!-- main stroke -->
+    <path d="M324 354
+             C212 354 152 438 152 540
+             C152 694 284 804 438 804
+             H516"
+          stroke="url(#blueGrad)" stroke-width="176" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- highlight ridge -->
+    <path d="M324 354
+             C212 354 152 438 152 540
+             C152 694 284 804 438 804
+             H516"
+          stroke="url(#blueHi)" stroke-width="112" stroke-linecap="round" stroke-linejoin="round" opacity="0.60"/>
+
+    <!-- right-pointing arrow head -->
+    <path d="M516 804
+             L629 874
+             Q658 892 670 860
+             Q678 838 655 821
+             L586 772
+             L655 723
+             Q678 706 670 684
+             Q658 652 629 670
+             L516 740
+             Q492 755 492 772
+             Q492 789 516 804
+             Z"
+          fill="url(#blueGrad)"/>
+    <path d="M526 798
+             L622 856
+             Q640 866 646 849
+             Q652 833 636 822
+             L572 777
+             L636 732
+             Q652 721 646 705
+             Q640 687 622 697
+             L526 755
+             Q512 763 512 777
+             Q512 790 526 798
+             Z"
+          fill="url(#blueHi)" opacity="0.60"/>
+  </g>
+
+  <!-- TOP CHAIN LINK (front-most) -->
+  <g filter="url(#clayShadow)">
+    <!-- left (blue) half -->
+    <g clip-path="url(#clipLeft)">
+      <use href="#topLinkShape" fill="url(#blueGrad)"/>
+      <use href="#topLinkShape" fill="url(#blueHi)" opacity="0.55"/>
+    </g>
+
+    <!-- right (orange) half -->
+    <g clip-path="url(#clipRight)">
+      <use href="#topLinkShape" fill="url(#orangeGrad)"/>
+      <use href="#topLinkShape" fill="url(#orangeHi)" opacity="0.55"/>
+    </g>
+  </g>
+</svg>

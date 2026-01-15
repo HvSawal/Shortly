@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    /* Light */
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* ✅ Brand color (was near-black) */
+    --primary: 221 83% 53%;            /* indigo-600-ish */
+    --primary-foreground: 210 40% 98%;
+
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    /* ✅ Accent can be a soft tint instead of gray */
+    --accent: 221 83% 96%;             /* indigo tint */
+    --accent-foreground: 221 83% 25%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    /* ✅ Ring should match brand */
+    --ring: 221 83% 53%;
+
+    --radius: 1rem;
+
+    /* Optional extra tokens for nicer gradients/glow usage */
+    --brand: 221 83% 53%;
+    --brand-2: 199 89% 48%;            /* sky-500-ish */
+  }
+
+  .dark {
+    /* Dark */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 6.5%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 6.5%;
+    --popover-foreground: 210 40% 98%;
+
+    /* ✅ Brand color in dark mode */
+    --primary: 221 83% 65%;            /* a bit brighter for dark */
+    --primary-foreground: 222.2 84% 4.9%;
+
+    --secondary: 217.2 32.6% 14.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 14.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    /* ✅ Accent tint in dark mode */
+    --accent: 221 83% 18%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 40.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 14.5%;
+    --input: 217.2 32.6% 14.5%;
+
+    /* ✅ Ring matches brand */
+    --ring: 221 83% 65%;
+
+    --brand: 221 83% 65%;
+    --brand-2: 199 89% 60%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+
+  animation: var(--animate-bounce);
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
+  }
+
+  @keyframes nudge-right {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
+    100% { transform: translateX(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: none;
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  .animate-bottom{}
+
+  .animate-pop { animation: pop 180ms ease-out; }
+  .animate-wiggle { animation: wiggle 240ms ease-in-out; }
+  .animate-nudge-right { animation: nudge-right 220ms ease-in-out; }
+}
