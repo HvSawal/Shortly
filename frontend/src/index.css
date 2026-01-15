@@ -94,3 +94,43 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+@layer utilities {
+
+  animation: var(--animate-bounce);
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
+  }
+
+  @keyframes nudge-right {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
+    100% { transform: translateX(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: none;
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  .animate-bottom{}
+
+  .animate-pop { animation: pop 180ms ease-out; }
+  .animate-wiggle { animation: wiggle 240ms ease-in-out; }
+  .animate-nudge-right { animation: nudge-right 220ms ease-in-out; }
+}

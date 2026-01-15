@@ -7,6 +7,7 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/compo
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {Switch} from "@/components/ui/switch"
+import {cn} from "@/lib/utils.ts";
 
 type Props = {
     url: string
@@ -34,8 +35,9 @@ export function ShortenFormCard({
                                     setTouched,
                                     urlError,
                                 }: Props) {
-    const canSubmit = url.trim().length > 0 && !isLoading
-    const showError = touched && !!urlError
+    const canSubmit = url.trim().length > 0 && !isLoading;
+    const showError = touched && !!urlError;
+    const [popped, setPopped] = React.useState(false);
 
     async function onPaste() {
         try {
@@ -57,6 +59,11 @@ export function ShortenFormCard({
             e.preventDefault()
             if (canSubmit) onSubmit()
         }
+    }
+
+    function pop() {
+        setPopped(true);
+        window.setTimeout(() => setPopped(false), 200);
     }
 
     const urlErrorId = "url-error"
@@ -90,12 +97,12 @@ export function ShortenFormCard({
                         />
                         <Button
                             variant="pasteBtn"
-                            className="h-11 shrink-0 dark:bg-white"
-                            onClick={onPaste}
+                            className="group h-11 shrink-0 dark:bg-white"
+                            onClick={() => { pop(); onPaste(); }}
                             disabled={isLoading}
                             title="Paste from clipboard"
                         >
-                            <Clipboard className="mr-2 h-4 w-4"/>
+                            <Clipboard className={cn("mr-2 h-4 w-4 transition-transform group-hover:rotate-[-8deg]",popped && "animate-pop")}/>
                             Paste
                         </Button>
                     </div>
@@ -139,7 +146,7 @@ export function ShortenFormCard({
                     <Button
                         type="button"
                         variant={"shorten"}
-                        className="h-11 w-full sm:w-auto transition-all duration-300 hover:scale-[1.02] active:scale-[0.95]"
+                        className="group h-11 w-full sm:w-auto transition-all duration-300 hover:scale-[1.02] active:scale-[0.95]"
                         onClick={() => {
                             // mark touched so error shows if invalid
                             setTouched(true)
@@ -156,7 +163,7 @@ export function ShortenFormCard({
                             </>
                         ) : (
                             <>
-                                <Wand2 className="mr-2 h-4 w-4" />
+                                <Wand2 className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 group-hover:scale-105" />
                                 Shorten
                             </>
                         )}

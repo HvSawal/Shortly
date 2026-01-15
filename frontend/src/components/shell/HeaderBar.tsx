@@ -26,19 +26,21 @@ export function HeaderBar() {
                 <div className="flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-xl border bg-background shadow-sm">
                         <Link2 className="h-4 w-4" />
+                        <img src={"/logo/url-shortener-logo-clay.svg"} alt={""}/>
                     </div>
                     <div className="leading-tight">
                         <div className="text-sm font-semibold tracking-tight">Shortly</div>
                         <div className="text-xs text-muted-foreground">URL Shortener</div>
                     </div>
                     <Separator orientation="vertical" className="mx-2 hidden h-6 sm:block" />
-                    <div className="hidden items-center gap-2 sm:flex">
-                        <Badge variant="secondary">V1</Badge>
-                        <Badge variant="outline">No Auth</Badge>
-                    </div>
+
                 </div>
 
                 <div className="flex items-center gap-2">
+                    <div className="hidden items-center gap-2 sm:flex">
+                        <Badge variant="outline">V 1.0</Badge>
+                        {/*<Badge variant="outline">No Auth</Badge>*/}
+                    </div>
                     <Button
                         type="button"
                         variant="ghost"
