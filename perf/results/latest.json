@@ -1,11 +1,11 @@
 {
-  "runId": "20260116T015834Z",
-  "generatedAt": "2026-01-16T01:59:34Z",
+  "runId": "20260116T020330Z",
+  "generatedAt": "2026-01-16T02:04:30Z",
   "runs": [
     {
       "name": "redirect_domain_safe",
-      "runId": "20260116T015834Z",
-      "createdAt": "2026-01-16T01:59:34Z",
+      "runId": "20260116T020330Z",
+      "createdAt": "2026-01-16T02:04:30Z",
       "httpReqs": 0,
       "iterations": 0,
       "errorRate": 0,
@@ -18,8 +18,8 @@
     },
     {
       "name": "mixed_domain_safe",
-      "runId": "20260116T015834Z",
-      "createdAt": "2026-01-16T01:59:34Z",
+      "runId": "20260116T020330Z",
+      "createdAt": "2026-01-16T02:04:30Z",
       "httpReqs": 0,
       "iterations": 0,
       "errorRate": 0,
