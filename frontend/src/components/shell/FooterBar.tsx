@@ -22,10 +22,10 @@ export function FooterBar() {
                         >
                             Swagger
                         </Button>
-                        <Button type="button" variant="outline" className="h-9" onClick={() => open("#")}>
+                        <Button type="button" variant="outline" className="h-9" onClick={() => open("/docs/performance")}>
                             Docs
                         </Button>
-                        <Button type="button" variant="outline" className="h-9" onClick={() => open("#")}>
+                        <Button type="button" variant="outline" className="h-9" onClick={() => open("https://github.com/HvSawal/Shortly")}>
                             GitHub
                         </Button>
                     </div>
