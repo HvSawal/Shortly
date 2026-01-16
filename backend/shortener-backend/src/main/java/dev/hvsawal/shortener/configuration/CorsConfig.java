@@ -12,7 +12,7 @@ public class CorsConfig implements WebMvcConfigurer {
     private final String[] allowedOrigins;
 
     public CorsConfig(org.springframework.core.env.Environment env) {
-        String raw = env.getProperty("cors.allowed-origins", "http://localhost:5173,https://short-ly-alpha.vercel.app");
+        String raw = env.getProperty("cors.allowed-origins", "http://localhost:5173,https://shortly.hsawal.com,https://short-ly-alpha.vercel.app");
         this.allowedOrigins = Arrays.stream(raw.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isBlank())
