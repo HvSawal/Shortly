@@ -1,0 +1,147 @@
+name: Perf - Scheduled k6
+
+on:
+  workflow_dispatch:
+  schedule:
+    # every day at 06:30 UTC (01:30 ET)
+    - cron: "30 6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: perf-k6
+  cancel-in-progress: false
+
+jobs:
+  run-k6:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Build CODES env from perf/codes_domain.txt
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f perf/codes_domain.txt ]; then
+            echo "Missing perf/codes_domain.txt. Create it with one valid code per line."
+            exit 1
+          fi
+
+          # strip comments/blank lines
+          CODES=$(grep -v '^\s*#' perf/codes_domain.txt | sed '/^\s*$/d' | paste -sd, -)
+          if [ -z "${CODES}" ]; then
+            echo "perf/codes_domain.txt is empty after filtering. Add at least 1 valid code."
+            exit 1
+          fi
+
+          echo "CODES=${CODES}" >> $GITHUB_ENV
+          echo "RUN_ID=$(date -u +%Y%m%dT%H%M%SZ)" >> $GITHUB_ENV
+
+      - name: Run redirect-only (domain) - safe
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p perf/results/raw
+          k6 run \
+            --summary-export=perf/results/raw/redirect_domain.json \
+            -e GO_BASE="https://go.hsawal.com" \
+            -e CODES="${CODES}" \
+            -e RPS=200 \
+            -e DURATION="30s" \
+            -e PRE_VUS=100 \
+            -e MAX_VUS=1500 \
+            perf/redirect_only.js
+
+      - name: Run mixed (domain) - safe
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p perf/results/raw
+          k6 run \
+            --summary-export=perf/results/raw/mixed_domain.json \
+            -e API_BASE="https://api.hsawal.com" \
+            -e GO_BASE="https://go.hsawal.com" \
+            -e CODES="${CODES}" \
+            -e REDIRECT_RPS=100 \
+            -e SHORTEN_RPS=1 \
+            -e UNIQUE_URL=0 \
+            -e DURATION="30s" \
+            perf/mixed.js
+
+      - name: Normalize metrics into latest.json + history.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p perf/results
+
+          extract() {
+            local name="$1"
+            local file="$2"
+
+            # k6 summary-export structure: metrics.http_req_duration.values["p(95)"] etc.
+            jq -c --arg name "$name" --arg runId "$RUN_ID" '
+              def ms(x):
+                # k6 exports durations in milliseconds already (numbers), but some versions export seconds in console
+                # Summary JSON uses ms numeric values for duration metrics.
+                x;
+
+              {
+                name: $name,
+                runId: $runId,
+                createdAt: (now | todateiso8601),
+                httpReqs: (.metrics.http_reqs.values.count // 0),
+                iterations: (.metrics.iterations.values.count // 0),
+                errorRate: (.metrics.http_req_failed.values.rate // 0),
+                latency: {
+                  avg_ms: (.metrics.http_req_duration.values.avg // 0),
+                  p95_ms: (.metrics.http_req_duration.values["p(95)"] // 0),
+                  p99_ms: (.metrics.http_req_duration.values["p(99)"] // 0),
+                  max_ms: (.metrics.http_req_duration.values.max // 0)
+                }
+              }
+            ' "$file"
+          }
+
+          REDIRECT=$(extract "redirect_domain_safe" "perf/results/raw/redirect_domain.json")
+          MIXED=$(extract "mixed_domain_safe" "perf/results/raw/mixed_domain.json")
+
+          LATEST=$(jq -n --arg runId "$RUN_ID" --arg generatedAt "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --argjson r "$REDIRECT" --argjson m "$MIXED" \
+            '{runId:$runId, generatedAt:$generatedAt, runs:[$r,$m]}')
+
+          echo "$LATEST" > perf/results/latest.json
+
+          # Append to history.json (keep last 60 entries)
+          if [ -f perf/results/history.json ]; then
+            jq --argjson latest "$LATEST" '
+              . + [$latest] | (if length > 60 then .[-60:] else . end)
+            ' perf/results/history.json > perf/results/history.tmp.json
+            mv perf/results/history.tmp.json perf/results/history.json
+          else
+            jq -n --argjson latest "$LATEST" '[ $latest ]' > perf/results/history.json
+          fi
+
+      - name: Commit results back to repo
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add perf/results/latest.json perf/results/history.json perf/results/raw/*.json || true
+
+          # Avoid empty commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore(perf): update k6 results (${RUN_ID}) [skip ci]"
+          git push
