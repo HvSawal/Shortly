@@ -55,7 +55,7 @@ shortener:
       resolve: 10
 
   ratelimit:
-    shorten-per-minute: 60
+    shorten-per-minute: 240
 
   clickcount:
     enabled: true
