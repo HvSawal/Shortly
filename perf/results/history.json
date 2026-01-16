@@ -1,0 +1,36 @@
+[
+  {
+    "runId": "20260116T013426Z",
+    "generatedAt": "2026-01-16T01:35:27Z",
+    "runs": [
+      {
+        "name": "redirect_domain_safe",
+        "runId": "20260116T013426Z",
+        "createdAt": "2026-01-16T01:35:27Z",
+        "httpReqs": 0,
+        "iterations": 0,
+        "errorRate": 0,
+        "latency": {
+          "avg_ms": 0,
+          "p95_ms": 0,
+          "p99_ms": 0,
+          "max_ms": 0
+        }
+      },
+      {
+        "name": "mixed_domain_safe",
+        "runId": "20260116T013426Z",
+        "createdAt": "2026-01-16T01:35:27Z",
+        "httpReqs": 0,
+        "iterations": 0,
+        "errorRate": 0,
+        "latency": {
+          "avg_ms": 0,
+          "p95_ms": 0,
+          "p99_ms": 0,
+          "max_ms": 0
+        }
+      }
+    ]
+  }
+]
