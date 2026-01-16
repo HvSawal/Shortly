@@ -87,21 +87,24 @@ jobs:
             
             # k6 summary-export structure: metrics.http_req_duration.values["p(95)"] etc.
             jq -c --arg name "$name" --arg runId "$RUN_ID" '
-              def getCount(m): (m.values.count // m.value // 0);
-              def getRate(m):  (m.values.rate  // m.value // 0);
-              def getDur(m; k): (m.values[k] // m.values.avg // m.value // 0);
+              def pickCount(m): (m.count // m.values.count // 0);
+              def pickRate(m):  (m.value // m.rate // m.values.rate // 0);
+              def durAvg(m): (m.avg // m.values.avg // 0);
+              def durP95(m): (m["p(95)"] // m.values["p(95)"] // 0);
+              def durP99(m): (m["p(99)"] // m.values["p(99)"] // 0);
+              def durMax(m): (m.max // m.values.max // 0);
               {
                 name: $name,
                 runId: $runId,
                 createdAt: (now | todateiso8601),
-                httpReqs: getCount(.metrics.http_reqs),
-                iterations: getCount(.metrics.iterations),
-                errorRate: getRate(.metrics.http_req_failed),
+                httpReqs: pickCount(.metrics.http_reqs),
+                iterations: pickCount(.metrics.iterations),
+                errorRate: pickRate(.metrics.http_req_failed),
                 latency: {
-                  avg_ms:  (.metrics.http_req_duration.values.avg // .metrics.http_req_duration.value // 0),
-                  p95_ms:  (.metrics.http_req_duration.values["p(95)"] // 0),
-                  p99_ms:  (.metrics.http_req_duration.values["p(99)"] // 0),
-                  max_ms:  (.metrics.http_req_duration.values.max // .metrics.http_req_duration.value // 0)
+                  avg_ms: durAvg(.metrics.http_req_duration),
+                  p95_ms: durP95(.metrics.http_req_duration),
+                  p99_ms: durP99(.metrics.http_req_duration),
+                  max_ms: durMax(.metrics.http_req_duration)
                 }
               }
             ' "$file"
