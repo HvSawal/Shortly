@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+import {Button} from "@/components/ui/button"
 
 export function FooterBar() {
     const open = (url: string) => window.open(url, "_blank", "noopener,noreferrer")
@@ -22,20 +21,15 @@ export function FooterBar() {
                         >
                             Swagger
                         </Button>
-                        <Button type="button" variant="outline" className="h-9" onClick={() => open("/docs/performance")}>
+                        <Button type="button" variant="outline" className="h-9"
+                                onClick={() => open("/docs/performance")}>
                             Docs
                         </Button>
-                        <Button type="button" variant="outline" className="h-9" onClick={() => open("https://github.com/HvSawal/Shortly")}>
+                        <Button type="button" variant="outline" className="h-9"
+                                onClick={() => open("https://github.com/HvSawal/Shortly")}>
                             GitHub
                         </Button>
                     </div>
-                </div>
-
-                <Separator className="my-6" />
-
-                <div className="text-xs text-muted-foreground">
-                    Tip: When using Cloudflare Tunnel + Vercel, keep <code>VITE_API_BASE_URL</code> and backend{" "}
-                    <code>SHORTENER_PUBLIC_BASE_URL</code> in sync.
                 </div>
             </div>
         </footer>

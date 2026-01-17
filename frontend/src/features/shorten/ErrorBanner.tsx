@@ -14,8 +14,8 @@ function toBannerModel(error: unknown): {
     if (error instanceof ApiError) {
         if (error.kind === "network") {
             return {
-                title: "Backend unavailable",
-                detail: "Make sure the backend is running and reachable.",
+                title: "Backend service is unavailable",
+                detail: "Please try again in a few mins.",
             }
         }
 

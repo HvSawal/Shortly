@@ -85,12 +85,6 @@ export function HomePage() {
             {/* Hero */}
             <section className="space-y-4">
                 <div className="mb-10 text-center space-y-4">
-                    {/*<div*/}
-                    {/*    className="inline-flex items-center gap-2 rounded-full border bg-white/50 px-3 py-1 text-xs font-medium text-purple-700 shadow-sm backdrop-blur">*/}
-                    {/*    <Sparkles className="h-3.5 w-3.5"/>*/}
-                    {/*    Production-grade demo*/}
-                    {/*</div>*/}
-
                     <h1 className="mx-auto max-w-3xl text-4xl font-extrabold tracking-tight sm:text-6xl ">
                         Ship short links, <br className="hidden sm:block"/>
                         <span
@@ -103,25 +97,7 @@ export function HomePage() {
                         Transform long, ugly links into short, reusable URLs. Built with high-performance APIs,
                         defensive security, and fast redirects.
                     </p>
-
-                    {/*<div className="flex flex-wrap justify-center gap-2 pt-2">*/}
-                    {/*    {["No auth (V1)", "Default expiry", "Anti-enumeration codes", "Backpressure (429/503)"].map((tag) => (*/}
-                    {/*        <Badge key={tag} variant="secondary" className="bg-slate-100 text-slate-600 hover:bg-slate-200">*/}
-                    {/*            {tag}*/}
-                    {/*        </Badge>*/}
-                    {/*    ))}*/}
-                    {/*</div>*/}
                 </div>
-
-                {/*<div className="space-y-2">*/}
-                {/*    <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">*/}
-                {/*        Ship short links that feel production-ready.*/}
-                {/*    </h1>*/}
-                {/*    <p className="max-w-prose text-muted-foreground">*/}
-                {/*        Clean URL shortening with strong validation, consistent errors, caching for fast redirects,*/}
-                {/*        and a UI that looks like a real product.*/}
-                {/*    </p>*/}
-                {/*</div>*/}
 
                 <div className="flex flex-wrap justify-center gap-2 text-sm text-muted-foreground">
                     <Badge variant={"outline"}
@@ -201,8 +177,6 @@ export function HomePage() {
             />
 
             {/* Result */}
-            {/*{result ? <ResultCard result={result} /> : null}*/}
-
             <AnimatePresence>
                 {result ? (
                     <motion.div key="result" {...enter} transition={{ duration: 0.22, ease: "easeInOut" }}>
