@@ -5,11 +5,10 @@ import dev.hvsawal.shortener.repository.ShortUrlRepository;
 import dev.hvsawal.shortener.support.resilience.DbBulkhead;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -43,7 +42,7 @@ public class InMemoryBatchedClickTracker implements ClickTracker {
                                        ShortUrlRepository repo,
                                        DbBulkhead bulkhead,
                                        MeterRegistry registry,
-                                       PlatformTransactionManager txManager){
+                                       PlatformTransactionManager txManager) {
         this.enabled = props.clickcount().enabled();
         this.maxEntries = Math.max(1, props.clickcount().maxBufferEntries());
         this.repo = repo;
@@ -52,15 +51,14 @@ public class InMemoryBatchedClickTracker implements ClickTracker {
         this.tx.setTimeout(1);
 
         this.recorded = Counter.builder("shortener_click_recorded_total").register(registry);
-        this.dropped  = Counter.builder("shortener_click_dropped_total").register(registry);
-        this.flushed  = Counter.builder("shortener_click_flushed_total").register(registry);
+        this.dropped = Counter.builder("shortener_click_dropped_total").register(registry);
+        this.flushed = Counter.builder("shortener_click_flushed_total").register(registry);
     }
 
     @Override
     public void record(long id) {
         if (!enabled) return;
 
-        // best-effort: if buffer is too large, drop
         if (approxEntries.get() > maxEntries) {
             dropped.increment();
             return;
@@ -69,7 +67,6 @@ public class InMemoryBatchedClickTracker implements ClickTracker {
         ConcurrentHashMap<Long, LongAdder> map = buffer.get();
         LongAdder adder = map.get(id);
         if (adder == null) {
-            // try to add a new entry
             LongAdder newAdder = new LongAdder();
             LongAdder existing = map.putIfAbsent(id, newAdder);
             adder = (existing != null) ? existing : newAdder;
@@ -80,12 +77,13 @@ public class InMemoryBatchedClickTracker implements ClickTracker {
         recorded.increment();
     }
 
-    // flush interval controlled by @Scheduled + config value below (see step 3)
+    // flush interval controlled by @Scheduled + config value below
     @Scheduled(fixedDelayString = "${shortener.clickcount.flush-interval-ms:1000}")
     public void scheduledFlush() {
         if (!enabled) return;
 
-        // best-effort: never block redirect traffic. If DB is “busy”, skip this flush.
+        //never block redirect traffic.
+        //If DB is busy, skip this flush.
         try (var permit = bulkhead.tryAcquireResolve()) {
             if (!permit.acquired()) return;
             flushNow();
@@ -109,7 +107,6 @@ public class InMemoryBatchedClickTracker implements ClickTracker {
                 tx.executeWithoutResult(status -> repo.incrementClickCount(id, delta));
                 flushed.increment(delta);
             } catch (Exception ex) {
-                // best-effort: drop analytics, but log once so we can see it if it keeps happening
                 log.warn("Click flush failed for id={} delta={} (dropping). {}", id, delta, ex.toString());
             }
         }
