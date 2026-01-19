@@ -366,8 +366,34 @@ function TrendCard({
     const grid = "hsl(var(--border))";
 
     const yFormatter = (v: number) => {
+        if (!Number.isFinite(v)) return "";
         if (metric === "err") return `${(v * 100).toFixed(1)}%`;
         return `${Math.round(v)}ms`;
+    };
+
+    const tickFormatter = (ts: number) => {
+        const d = new Date(ts);
+        return d.toLocaleDateString(undefined, { month: "short", day: "2-digit" });
+    };
+
+    const tooltipLabelFormatter = (ts: any) => {
+        const n = Number(ts);
+        if (!Number.isFinite(n)) return "";
+        const d = new Date(n);
+        // show more precise time so points are clearly distinct
+        return d.toLocaleString(undefined, {
+            month: "short",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+    };
+
+    const tooltipValueFormatter = (value: any) => {
+        const v = Number(value);
+        if (!Number.isFinite(v)) return ["-", metric];
+        if (metric === "err") return [`${(v * 100).toFixed(2)}%`, metric];
+        return [`${v.toFixed(2)}ms`, metric];
     };
 
     return (
@@ -389,12 +415,16 @@ function TrendCard({
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={data}>
                             <CartesianGrid stroke={grid} strokeOpacity={0.35} vertical={false} />
-                            <XAxis dataKey="t" tick={{ fontSize: 12 }} interval="preserveStartEnd" />
-                            <YAxis
+                            {/* ✅ Use unique X value */}
+                            <XAxis
+                                dataKey="ts"
+                                type="number"
+                                domain={["dataMin", "dataMax"]}
                                 tick={{ fontSize: 12 }}
-                                tickFormatter={yFormatter}
-                                width={48}
+                                tickFormatter={tickFormatter}
                             />
+                            <YAxis tick={{ fontSize: 12 }} tickFormatter={yFormatter} width={52} />
+
                             <Tooltip
                                 contentStyle={{
                                     background: "hsl(var(--background))",
@@ -402,12 +432,10 @@ function TrendCard({
                                     borderRadius: 12,
                                 }}
                                 labelStyle={{ opacity: 0.8 }}
-                                formatter={(value: any) => {
-                                    const v = Number(value);
-                                    if (metric === "err") return `${(v * 100).toFixed(2)}%`;
-                                    return `${v.toFixed(2)}ms`;
-                                }}
+                                labelFormatter={tooltipLabelFormatter}
+                                formatter={tooltipValueFormatter}
                             />
+
                             <Line type="monotone" dataKey={metric} dot={false} stroke={stroke} strokeWidth={2} />
                         </LineChart>
                     </ResponsiveContainer>

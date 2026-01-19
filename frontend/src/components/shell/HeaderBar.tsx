@@ -1,8 +1,8 @@
 import * as React from "react"
-import { Link2, Moon, Sun } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+import {Link2, Moon, Sun} from "lucide-react"
+import {Badge} from "@/components/ui/badge"
+import {Button} from "@/components/ui/button"
+import {Separator} from "@/components/ui/separator"
 
 function getInitialTheme(): "light" | "dark" {
     if (typeof document === "undefined") return "dark"

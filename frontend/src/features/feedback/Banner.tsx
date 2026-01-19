@@ -1,12 +1,7 @@
 import * as React from "react"
-import {
-    CheckCircle2,
-    Info,
-    AlertTriangle,
-    XCircle,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import {AlertTriangle, CheckCircle2, Info, XCircle,} from "lucide-react"
+import {cn} from "@/lib/utils"
+import {Button} from "@/components/ui/button"
 
 export type BannerVariant = "error" | "warning" | "info" | "success"
 
@@ -49,13 +44,13 @@ const STYLES: Record<BannerVariant, { root: string; icon: string }> = {
 function defaultIcon(variant: BannerVariant) {
     switch (variant) {
         case "error":
-            return <XCircle className="h-5 w-5 text-red-500/80" />
+            return <XCircle className="h-5 w-5 text-red-500/80"/>
         case "warning":
-            return <AlertTriangle className="h-5 w-5" />
+            return <AlertTriangle className="h-5 w-5"/>
         case "info":
-            return <Info className="h-5 w-5" />
+            return <Info className="h-5 w-5"/>
         case "success":
-            return <CheckCircle2 className="h-5 w-5" />
+            return <CheckCircle2 className="h-5 w-5"/>
     }
 }
 

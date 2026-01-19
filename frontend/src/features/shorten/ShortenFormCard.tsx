@@ -135,11 +135,6 @@ export function ShortenFormCard({
                             "
                                 checked={preview} onCheckedChange={setPreview} disabled={isLoading}/>
                     </div>
-
-                    {/*<p className="text-xs text-muted-foreground">*/}
-                    {/*    Tip: include the full scheme (https://). We’ll validate input and return a ProblemDetails error*/}
-                    {/*    if invalid.*/}
-                    {/*</p>*/}
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -154,8 +149,6 @@ export function ShortenFormCard({
                         }}
                         disabled={!canSubmit}
                     >
-                        {/*<Wand2 className="mr-2 h-4 w-4"/>*/}
-                        {/*{isLoading ? "Shortening…" : "Shorten"}*/}
                         {isLoading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
