@@ -168,5 +168,39 @@
         }
       }
     ]
+  },
+  {
+    "runId": "20260120T011345Z",
+    "generatedAt": "2026-01-20T01:14:46Z",
+    "runs": [
+      {
+        "name": "redirect_domain_safe",
+        "runId": "20260120T011345Z",
+        "createdAt": "2026-01-20T01:14:46Z",
+        "httpReqs": 6001,
+        "iterations": 6001,
+        "errorRate": 0,
+        "latency": {
+          "avg_ms": 90.9149361913017,
+          "p95_ms": 94.627634,
+          "p99_ms": 0,
+          "max_ms": 289.296291
+        }
+      },
+      {
+        "name": "mixed_domain_safe",
+        "runId": "20260120T011345Z",
+        "createdAt": "2026-01-20T01:14:46Z",
+        "httpReqs": 3032,
+        "iterations": 3032,
+        "errorRate": 0,
+        "latency": {
+          "avg_ms": 88.58139273054067,
+          "p95_ms": 93.8452978,
+          "p99_ms": 0,
+          "max_ms": 483.953233
+        }
+      }
+    ]
   }
 ]
