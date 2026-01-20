@@ -26,7 +26,7 @@ export function HeaderBar() {
                 <div className="flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-xl border bg-background shadow-sm">
                         <Link2 className="h-4 w-4" />
-                        <img src={"/logo/url-shortener-logo-clay.svg"} alt={""}/>
+                        <img src={"/logo/url-shortener-logo-clay-v2-square.svg"} alt={""}/>
                     </div>
                     <div className="leading-tight">
                         <div className="text-sm font-semibold tracking-tight">Shortly</div>
