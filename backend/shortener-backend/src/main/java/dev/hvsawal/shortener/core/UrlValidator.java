@@ -8,9 +8,10 @@ import java.net.URI;
 import java.util.Set;
 
 public final class UrlValidator {
-    private UrlValidator() {}
-
     private static final Set<String> ALLOWED_SCHEMES = Set.of("http", "https");
+
+    private UrlValidator() {
+    }
 
     /**
      * Strict-ish "public URL" policy:

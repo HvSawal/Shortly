@@ -2,11 +2,11 @@ package dev.hvsawal.shortener.core;
 
 import dev.hvsawal.shortener.support.errors.InvalidUrlException;
 
-import java.net.IDN;
 import java.net.URI;
 
 public final class UrlNormalizer {
-    private UrlNormalizer() {}
+    private UrlNormalizer() {
+    }
 
     public static String normalize(String input) {
         if (input == null) throw new InvalidUrlException("URL is required");
