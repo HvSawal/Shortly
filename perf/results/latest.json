@@ -1,33 +1,33 @@
 {
-  "runId": "20260120T011345Z",
-  "generatedAt": "2026-01-20T01:14:46Z",
+  "runId": "20260124T024633Z",
+  "generatedAt": "2026-01-24T02:47:34Z",
   "runs": [
     {
       "name": "redirect_domain_safe",
-      "runId": "20260120T011345Z",
-      "createdAt": "2026-01-20T01:14:46Z",
-      "httpReqs": 6001,
-      "iterations": 6001,
+      "runId": "20260124T024633Z",
+      "createdAt": "2026-01-24T02:47:34Z",
+      "httpReqs": 6000,
+      "iterations": 6000,
       "errorRate": 0,
       "latency": {
-        "avg_ms": 90.9149361913017,
-        "p95_ms": 94.627634,
+        "avg_ms": 36.84271941816667,
+        "p95_ms": 42.220440950000004,
         "p99_ms": 0,
-        "max_ms": 289.296291
+        "max_ms": 308.277056
       }
     },
     {
       "name": "mixed_domain_safe",
-      "runId": "20260120T011345Z",
-      "createdAt": "2026-01-20T01:14:46Z",
-      "httpReqs": 3032,
-      "iterations": 3032,
+      "runId": "20260124T024633Z",
+      "createdAt": "2026-01-24T02:47:34Z",
+      "httpReqs": 3031,
+      "iterations": 3031,
       "errorRate": 0,
       "latency": {
-        "avg_ms": 88.58139273054067,
-        "p95_ms": 93.8452978,
+        "avg_ms": 35.84498483635768,
+        "p95_ms": 43.9621215,
         "p99_ms": 0,
-        "max_ms": 483.953233
+        "max_ms": 314.152383
       }
     }
   ]
