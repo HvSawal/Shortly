@@ -2,6 +2,7 @@ package dev.hvsawal.shortener.controller;
 
 import dev.hvsawal.shortener.analytics.ClickTracker;
 import dev.hvsawal.shortener.service.ShortUrlService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
+@Hidden
 public class RedirectController {
 
     private final ShortUrlService service;
@@ -38,7 +40,6 @@ public class RedirectController {
     }
 
     private static String interstitialHtml(String target) {
-        // Minimal, safe interstitial. No templating.
         String escaped = target.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
         return """
         <!doctype html>
