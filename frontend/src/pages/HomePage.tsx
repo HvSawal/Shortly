@@ -25,9 +25,35 @@ export function HomePage() {
 
     const [warning, setWarning] = React.useState<string | null>(null)
 
+    const [highlightResult, setHighlightResult] = React.useState(false)
+
     const [touched, setTouched] = React.useState(false)
     const urlValidation = React.useMemo(() => validateUrl(url), [url])
     const urlError = urlValidation.ok ? null : urlValidation.message
+
+    const resultRef = React.useRef<HTMLDivElement | null>(null)
+
+    useEffect(() => {
+        if (!result) return
+
+        const id = window.setTimeout(() => {
+            resultRef.current?.scrollIntoView({
+                behavior: reduceMotion ? "auto" : "smooth",
+                block: "start",
+            })
+        }, 0)
+
+        return () => window.clearTimeout(id)
+    }, [result, reduceMotion])
+
+    useEffect(() => {
+        if (!result) return
+
+        setHighlightResult(true)
+        const t = window.setTimeout(() => setHighlightResult(false), 900)
+
+        return () => window.clearTimeout(t)
+    }, [result])
 
     useEffect(() => {
         // Autofocus the URL input if present
@@ -72,6 +98,7 @@ export function HomePage() {
         setError(null)
         setWarning(null)
         setTouched(false)
+        setHighlightResult(false)
         const el = document.getElementById("url") as HTMLInputElement | null
         el?.focus()
     }
@@ -180,7 +207,9 @@ export function HomePage() {
             <AnimatePresence>
                 {result ? (
                     <motion.div key="result" {...enter} transition={{ duration: 0.22, ease: "easeInOut" }}>
-                        <ResultCard result={result}/>
+                        <div ref={resultRef} className="scroll-mt-24">
+                            <ResultCard result={result} highlight={highlightResult} />
+                        </div>
                     </motion.div>
                 ) : null}
             </AnimatePresence>
