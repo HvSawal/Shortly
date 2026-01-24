@@ -60,6 +60,7 @@ export function ResultCard({ result, highlight = false }: Props) {
 
                     <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                         <Button type="button" variant="pasteBtn" className="group h-11" onClick={onCopy}>
+                            {/*Copy*/}
                             {copied ? (
                                 <CheckCircle2 className="mr-2 h-4 w-4" />
                             ) : (
@@ -67,7 +68,6 @@ export function ResultCard({ result, highlight = false }: Props) {
                             )}
                             {copied ? "Copied" : "Copy"}
                         </Button>
-
                         <Button type="button" variant="outline" className="group h-11" onClick={onOpen}>
                             <ExternalLink className="mr-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             Open
