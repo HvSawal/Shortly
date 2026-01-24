@@ -2,7 +2,7 @@ import http from "k6/http";
 import { check, sleep } from "k6";
 import { Counter, Rate } from "k6/metrics";
 
-// Treat 429 as "expected" for reporting (we still track it explicitly)
+// Treat 429 as "expected" for reporting
 http.setResponseCallback(http.expectedStatuses({ min: 200, max: 399 }, 429));
 
 const API_BASE = (__ENV.API_BASE || "https://api.hsawal.com").replace(/\/+$/, "");
@@ -21,6 +21,7 @@ function pickCode() {
 }
 
 export const options = {
+  summaryTrendStats: ["avg", "min", "med", "max", "p(90)", "p(95)", "p(99)"],
   scenarios: {
     redirect: {
       executor: "constant-arrival-rate",
