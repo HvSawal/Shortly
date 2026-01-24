@@ -17,6 +17,34 @@ public final class Feistel64 {
         this.roundKeys = deriveRoundKeys(secretKey, rounds);
     }
 
+    private static long toUnsignedLong(int x) {
+        return x & 0xFFFF_FFFFL;
+    }
+
+    private static int roundFunction(int r, int k) {
+        int x = r ^ k;
+        x *= 0x9E3779B9;
+        x = Integer.rotateLeft(x, 5);
+        x *= 0x85EBCA6B;
+        x ^= (x >>> 16);
+        return x;
+    }
+
+    private static int[] deriveRoundKeys(String secretKey, int rounds) {
+        try {
+            MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+            byte[] digest = sha256.digest(secretKey.getBytes(StandardCharsets.UTF_8));
+            ByteBuffer bb = ByteBuffer.wrap(digest);
+            int[] keys = new int[rounds];
+            for (int i = 0; i < rounds; i++) {
+                keys[i] = bb.getInt((i * 4) % (digest.length - 3));
+            }
+            return keys;
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to derive scramble keys", e);
+        }
+    }
+
     public long scramble(long x) {
         return feistel(x);
     }
@@ -49,33 +77,5 @@ public final class Feistel64 {
             right = newRight;
         }
         return (toUnsignedLong(left) << 32) | toUnsignedLong(right);
-    }
-
-    private static long toUnsignedLong(int x) {
-        return x & 0xFFFF_FFFFL;
-    }
-
-    private static int roundFunction(int r, int k) {
-        int x = r ^ k;
-        x *= 0x9E3779B9;
-        x = Integer.rotateLeft(x, 5);
-        x *= 0x85EBCA6B;
-        x ^= (x >>> 16);
-        return x;
-    }
-
-    private static int[] deriveRoundKeys(String secretKey, int rounds) {
-        try {
-            MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            byte[] digest = sha256.digest(secretKey.getBytes(StandardCharsets.UTF_8));
-            ByteBuffer bb = ByteBuffer.wrap(digest);
-            int[] keys = new int[rounds];
-            for (int i = 0; i < rounds; i++) {
-                keys[i] = bb.getInt((i * 4) % (digest.length - 3));
-            }
-            return keys;
-        } catch (Exception e) {
-            throw new IllegalStateException("Failed to derive scramble keys", e);
-        }
     }
 }

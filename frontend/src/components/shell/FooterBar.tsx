@@ -16,7 +16,7 @@ export function FooterBar() {
                             type="button"
                             variant="outline"
                             className="h-9"
-                            onClick={() => open("http://localhost:8080/swagger-ui/index.html#/")}
+                            onClick={() => open("https://api.hsawal.com/swagger-ui/index.html")}
                             title="Backend Swagger (same host)"
                         >
                             Swagger

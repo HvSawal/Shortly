@@ -4,9 +4,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 public final class UrlHash {
-    private UrlHash() {}
+    private UrlHash() {
+    }
 
-    /** SHA-256 hex(normalizedUrl + "|" + previewEnabled). */
+    /**
+     * SHA-256 hex(normalizedUrl + "|" + previewEnabled).
+     */
     public static String sha256Hex(String normalizedUrl, boolean previewEnabled) {
         String input = normalizedUrl + "|" + previewEnabled;
         try {
