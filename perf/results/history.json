@@ -304,5 +304,39 @@
         }
       }
     ]
+  },
+  {
+    "runId": "20260206T140338Z",
+    "generatedAt": "2026-02-06T14:04:38Z",
+    "runs": [
+      {
+        "name": "redirect_domain_safe",
+        "runId": "20260206T140338Z",
+        "createdAt": "2026-02-06T14:04:38Z",
+        "httpReqs": 6001,
+        "iterations": 6001,
+        "errorRate": 0,
+        "latency": {
+          "avg_ms": 46.80989898733543,
+          "p95_ms": 51.866273,
+          "p99_ms": 60.763642,
+          "max_ms": 258.884728
+        }
+      },
+      {
+        "name": "mixed_domain_safe",
+        "runId": "20260206T140338Z",
+        "createdAt": "2026-02-06T14:04:38Z",
+        "httpReqs": 3032,
+        "iterations": 3032,
+        "errorRate": 0,
+        "latency": {
+          "avg_ms": 48.795456880606714,
+          "p95_ms": 56.184118749999996,
+          "p99_ms": 126.13162110000025,
+          "max_ms": 221.316834
+        }
+      }
+    ]
   }
 ]
